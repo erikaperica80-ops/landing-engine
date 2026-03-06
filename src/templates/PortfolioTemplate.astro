@@ -1,0 +1,72 @@
+---
+import type { TenantConfig } from '../lib/tenant';
+import Footer from '../components/sections/Footer.astro';
+
+interface Props {
+  config: TenantConfig;
+}
+
+const { config } = Astro.props;
+const defaultProjects = ['Web Design', 'Brand Identity', 'UI/UX Design', 'Mobile Apps', 'Photography', 'Illustration'];
+const panelUrl = `http://localhost:5173?tenant=${config.id}`;
+---
+
+<!-- Portfolio Template: Minimal, creative, personal -->
+<header class="min-h-screen flex flex-col justify-center bg-white px-6 py-24">
+  <div class="max-w-3xl mx-auto">
+    {config.logoUrl && (
+      <img src={config.logoUrl} alt={config.name} class="w-16 h-16 rounded-full object-cover mb-8 shadow" />
+    )}
+    <p class="text-gray-400 text-sm uppercase tracking-widest mb-4">Portfolio</p>
+    <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">{config.name}</h1>
+    <p class="text-xl text-gray-500 mb-10 leading-relaxed">{config.tagline ?? config.description ?? 'Creative professional crafting beautiful digital experiences.'}</p>
+    <div class="flex gap-4 flex-wrap">
+      <a href="#work" class="bg-gray-900 text-white hover:bg-gray-700 font-semibold px-6 py-3 rounded-lg transition">
+        View My Work
+      </a>
+      {config.contactEmail && (
+        <a href={`mailto:${config.contactEmail}`} class="border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold px-6 py-3 rounded-lg transition">
+          Contact Me
+        </a>
+      )}
+      <a href={panelUrl} class="border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold px-6 py-3 rounded-lg transition">
+        Ir al Panel →
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Work / Projects -->
+<section id="work" class="py-20 px-6 bg-gray-50">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-2xl font-bold text-gray-900 mb-10">Selected Work</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {(config.features ?? defaultProjects).map((project, i) => (
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition group cursor-pointer">
+          <div class:list={['h-40 flex items-center justify-center text-4xl', ['bg-violet-100', 'bg-pink-100', 'bg-sky-100', 'bg-emerald-100', 'bg-amber-100', 'bg-rose-100'][i % 6]]}>
+            {['🎨', '✏️', '📱', '🖥️', '📷', '🎭'][i % 6]}
+          </div>
+          <div class="p-5">
+            <h3 class="font-semibold text-gray-900 group-hover:text-violet-600 transition">{project}</h3>
+            <p class="text-sm text-gray-500 mt-1">View project →</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- About / Bio -->
+<section class="py-20 px-6 bg-white">
+  <div class="max-w-3xl mx-auto text-center space-y-6">
+    <h2 class="text-2xl font-bold text-gray-900">About Me</h2>
+    <p class="text-gray-500 text-lg leading-relaxed">{config.description ?? 'I\'m a passionate creative professional with a love for crafting meaningful experiences. Let\'s create something amazing together.'}</p>
+    {config.contactEmail && (
+      <a href={`mailto:${config.contactEmail}`} class="inline-block bg-violet-600 hover:bg-violet-700 text-white font-semibold px-6 py-3 rounded-lg transition">
+        Say Hello →
+      </a>
+    )}
+  </div>
+</section>
+
+<Footer name={config.name} email={config.contactEmail} tenantId={config.id} />

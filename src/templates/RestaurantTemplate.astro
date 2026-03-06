@@ -1,0 +1,58 @@
+---
+import type { TenantConfig } from '../lib/tenant';
+import Footer from '../components/sections/Footer.astro';
+
+interface Props {
+  config: TenantConfig;
+}
+
+const { config } = Astro.props;
+const defaultMenu = ['Starters', 'Main Course', 'Desserts', 'Beverages', 'Chef\'s Specials', 'Seasonal Dishes'];
+const panelUrl = `http://localhost:5173?tenant=${config.id}`;
+---
+
+<!-- Restaurant Template: Warm/food-themed with menu highlights -->
+<header class="relative h-screen flex items-end bg-gray-900 overflow-hidden">
+  {config.heroImageUrl
+    ? <img src={config.heroImageUrl} alt={config.name} class="absolute inset-0 w-full h-full object-cover opacity-60" />
+    : <div class="absolute inset-0 bg-gradient-to-br from-orange-900 to-red-800 opacity-80"></div>
+  }
+  <div class="relative z-10 p-10 md:p-16 max-w-2xl text-white">
+    <p class="text-orange-300 uppercase tracking-widest text-sm mb-3">Welcome to</p>
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight">{config.name}</h1>
+    <p class="text-xl text-gray-200 mb-8">{config.tagline ?? config.description ?? 'Exceptional food, unforgettable moments.'}</p>
+    <div class="flex gap-4 flex-wrap">
+      <a href="#menu" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition">View Menu</a>
+      <a href={panelUrl} class="border border-white text-white hover:bg-white hover:text-gray-900 font-semibold px-6 py-3 rounded-lg transition">Ir al Panel →</a>
+    </div>
+  </div>
+</header>
+
+<!-- Menu Highlights -->
+<section id="menu" class="py-20 px-6 bg-amber-50">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Our Menu</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+      {(config.features ?? defaultMenu).map((item) => (
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-amber-100 text-center">
+          <div class="text-4xl mb-3">🍽️</div>
+          <p class="font-semibold text-gray-800">{item}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Reservation CTA -->
+<section class="py-16 px-6 bg-orange-600 text-white text-center">
+  <h2 class="text-3xl font-bold mb-4">Reserve a Table</h2>
+  <p class="mb-8 text-orange-100">{config.tagline ?? 'Book your table today for an unforgettable dining experience.'}</p>
+  {config.contactEmail
+    ? <a href={`mailto:${config.contactEmail}`} class="bg-white text-orange-600 font-semibold px-8 py-3 rounded-lg hover:bg-orange-50 transition">
+        Make a Reservation
+      </a>
+    : <button class="bg-white text-orange-600 font-semibold px-8 py-3 rounded-lg hover:bg-orange-50 transition">Make a Reservation</button>
+  }
+</section>
+
+<Footer name={config.name} email={config.contactEmail} tenantId={config.id} dark />

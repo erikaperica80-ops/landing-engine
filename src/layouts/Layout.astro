@@ -1,0 +1,33 @@
+---
+import type { TenantConfig } from '../lib/tenant';
+
+interface Props {
+  tenantConfig?: TenantConfig | null;
+  title?: string;
+}
+
+const { tenantConfig, title } = Astro.props;
+
+const pageTitle = title ?? tenantConfig?.name ?? 'Landing Page';
+const description = tenantConfig?.description ?? 'Welcome to our landing page.';
+const ogTitle = pageTitle;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <!-- Open Graph -->
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={description} />
+    {tenantConfig?.logoUrl && <meta property="og:image" content={tenantConfig.logoUrl} />}
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="min-h-screen bg-white text-gray-900 font-sans">
+    <slot />
+  </body>
+</html>

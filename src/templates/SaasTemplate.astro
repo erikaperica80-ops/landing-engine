@@ -1,0 +1,38 @@
+---
+import type { TenantConfig } from '../lib/tenant';
+import Hero from '../components/sections/Hero.astro';
+import Features from '../components/sections/Features.astro';
+import Pricing from '../components/sections/Pricing.astro';
+import Footer from '../components/sections/Footer.astro';
+
+interface Props {
+  config: TenantConfig;
+}
+
+const { config } = Astro.props;
+const defaultFeatures = ['Automated workflows', 'Team collaboration', 'Advanced analytics', 'API integrations', 'Priority support', '99.9% uptime SLA'];
+const defaultPricing = [
+  { plan: 'Starter', price: '$9/mo', features: ['5 users', '10 GB storage', 'Email support'] },
+  { plan: 'Pro', price: '$29/mo', features: ['25 users', '100 GB storage', 'Priority support', 'API access'] },
+  { plan: 'Enterprise', price: 'Custom', features: ['Unlimited users', 'Unlimited storage', 'Dedicated manager', 'SLA'] },
+];
+---
+
+<!-- SaaS Template: Dark hero + features + pricing -->
+<Hero
+  title={config.name}
+  tagline={config.tagline ?? config.description}
+  imageUrl={config.heroImageUrl}
+  ctaText="Start Free Trial"
+  tenantId={config.id}
+  dark
+/>
+
+<Features
+  title="Everything you need to scale"
+  items={config.features ?? defaultFeatures}
+/>
+
+<Pricing plans={config.pricing ?? defaultPricing} />
+
+<Footer name={config.name} email={config.contactEmail} tenantId={config.id} dark />
