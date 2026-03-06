@@ -1,0 +1,36 @@
+---
+interface Props {
+  title: string;
+  tagline?: string;
+  imageUrl?: string;
+  ctaText?: string;
+  ctaHref?: string;
+  tenantId?: string;
+  dark?: boolean;
+}
+
+const { title, tagline, imageUrl, ctaText = 'Get Started', ctaHref = '#', tenantId, dark = false } = Astro.props;
+const panelUrl = tenantId ? `http://localhost:5173?tenant=${tenantId}` : 'http://localhost:5173';
+---
+
+<section class:list={['relative py-24 px-6', dark ? 'bg-gray-900 text-white' : 'bg-white text-gray-900']}>
+  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12">
+    <div class="flex-1 space-y-6">
+      <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">{title}</h1>
+      {tagline && <p class:list={['text-xl', dark ? 'text-gray-300' : 'text-gray-600']}>{tagline}</p>}
+      <div class="flex flex-wrap gap-4">
+        <a href={ctaHref} class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition">
+          {ctaText}
+        </a>
+        <a href={panelUrl} class:list={['inline-block font-semibold px-6 py-3 rounded-lg border transition', dark ? 'border-gray-500 text-gray-300 hover:bg-gray-800' : 'border-gray-300 text-gray-700 hover:bg-gray-50']}>
+          Ir al Panel →
+        </a>
+      </div>
+    </div>
+    {imageUrl && (
+      <div class="flex-1">
+        <img src={imageUrl} alt={title} class="w-full rounded-xl shadow-lg object-cover max-h-80" />
+      </div>
+    )}
+  </div>
+</section>

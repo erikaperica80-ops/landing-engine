@@ -1,0 +1,49 @@
+---
+import type { TenantConfig } from '../lib/tenant';
+import Hero from '../components/sections/Hero.astro';
+import Features from '../components/sections/Features.astro';
+import Footer from '../components/sections/Footer.astro';
+
+interface Props {
+  config: TenantConfig;
+}
+
+const { config } = Astro.props;
+const defaultFeatures = ['Professional services', 'Client-focused approach', 'Proven track record', 'Certified experts', 'Flexible engagements', 'Results guaranteed'];
+---
+
+<!-- Business Template: Light/professional, hero + about + services -->
+<Hero
+  title={config.name}
+  tagline={config.tagline ?? config.description ?? 'Your trusted business partner.'}
+  imageUrl={config.heroImageUrl}
+  ctaText="Contact Us"
+  tenantId={config.id}
+/>
+
+<!-- About / Mission -->
+<section class="py-20 px-6 bg-white">
+  <div class="max-w-4xl mx-auto text-center space-y-4">
+    <h2 class="text-3xl font-bold text-gray-900">About Us</h2>
+    <p class="text-gray-600 text-lg leading-relaxed">{config.description ?? 'We deliver exceptional business solutions tailored to your unique needs. With years of expertise, our team is committed to your success.'}</p>
+  </div>
+</section>
+
+<Features
+  title="Our Services"
+  items={config.features ?? defaultFeatures}
+/>
+
+<!-- CTA Banner -->
+<section class="py-16 px-6 bg-blue-600 text-white text-center">
+  <h2 class="text-3xl font-bold mb-4">Ready to grow your business?</h2>
+  <p class="mb-8 text-blue-100">{config.tagline ?? 'Let\'s work together to achieve your goals.'}</p>
+  <a
+    href={config.contactEmail ? `mailto:${config.contactEmail}` : '#contact'}
+    class="bg-white text-blue-600 font-semibold px-8 py-3 rounded-lg hover:bg-blue-50 transition"
+  >
+    Get in Touch
+  </a>
+</section>
+
+<Footer name={config.name} email={config.contactEmail} tenantId={config.id} dark />

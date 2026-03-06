@@ -1,0 +1,28 @@
+---
+interface Props {
+  name: string;
+  email?: string;
+  tenantId?: string;
+  dark?: boolean;
+}
+
+const { name, email, tenantId, dark = false } = Astro.props;
+---
+
+<footer class:list={['py-12 px-6', dark ? 'bg-gray-950 text-gray-400' : 'bg-gray-900 text-gray-300']}>
+  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <div>
+      <p class="font-bold text-white text-lg">{name}</p>
+      {email && <a href={`mailto:${email}`} class="hover:text-white transition">{email}</a>}
+    </div>
+    <div class="flex gap-6 items-center">
+      <a
+        href={tenantId ? `http://localhost:5173?tenant=${tenantId}` : 'http://localhost:5173'}
+        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition"
+      >
+        Ir al Panel →
+      </a>
+    </div>
+    <p class="text-sm">&copy; {new Date().getFullYear()} {name}. All rights reserved.</p>
+  </div>
+</footer>

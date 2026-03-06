@@ -1,0 +1,81 @@
+---
+import type { TenantConfig } from '../lib/tenant';
+import Footer from '../components/sections/Footer.astro';
+
+interface Props {
+  config: TenantConfig;
+}
+
+const { config } = Astro.props;
+const defaultPrograms = ['Strength Training', 'HIIT Cardio', 'Yoga & Flexibility', 'CrossFit', 'Nutrition Coaching', 'Personal Training'];
+const defaultPricing = [
+  { plan: 'Basic', price: '$29/mo', features: ['Gym access', 'Group classes', 'Locker room'] },
+  { plan: 'Pro', price: '$59/mo', features: ['All Basic', 'Personal training (2x/mo)', 'Nutrition plan'] },
+  { plan: 'Elite', price: '$99/mo', features: ['All Pro', 'Unlimited PT sessions', 'VIP access', 'Supplements discount'] },
+];
+const panelUrl = `http://localhost:5173?tenant=${config.id}`;
+---
+
+<!-- Gym Template: Bold, energetic, dark/accent colors -->
+<header class="relative min-h-screen flex items-center bg-black overflow-hidden">
+  {config.heroImageUrl
+    ? <img src={config.heroImageUrl} alt={config.name} class="absolute inset-0 w-full h-full object-cover opacity-40" />
+    : <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-green-900"></div>
+  }
+  <div class="relative z-10 max-w-5xl mx-auto px-6 py-24 text-white">
+    <p class="text-green-400 uppercase tracking-widest text-sm font-bold mb-4">Train Hard. Live Strong.</p>
+    <h1 class="text-5xl md:text-7xl font-black uppercase mb-6 leading-none">{config.name}</h1>
+    <p class="text-xl text-gray-300 mb-10 max-w-xl">{config.tagline ?? config.description ?? 'Unlock your potential with elite training programs and world-class coaches.'}</p>
+    <div class="flex gap-4 flex-wrap">
+      <a href="#programs" class="bg-green-500 hover:bg-green-400 text-black font-bold px-8 py-4 rounded-lg text-lg transition uppercase tracking-wide">
+        View Programs
+      </a>
+      <a href={panelUrl} class="border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-black font-bold px-8 py-4 rounded-lg text-lg transition uppercase tracking-wide">
+        Ir al Panel →
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Programs -->
+<section id="programs" class="py-20 px-6 bg-gray-950 text-white">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-3xl font-black uppercase text-center text-green-400 mb-12">Our Programs</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {(config.features ?? defaultPrograms).map((program) => (
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-green-500 transition group">
+          <div class="text-green-500 text-3xl mb-3">💪</div>
+          <h3 class="text-lg font-bold group-hover:text-green-400 transition">{program}</h3>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Membership Pricing -->
+<section class="py-20 px-6 bg-black text-white">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-3xl font-black uppercase text-center mb-12">Memberships</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {(config.pricing ?? defaultPricing).map((plan, i) => (
+        <div class:list={['rounded-2xl p-8 flex flex-col gap-4 border', i === 1 ? 'bg-green-500 text-black border-green-400' : 'bg-gray-900 border-gray-800 text-white']}>
+          <h3 class="text-xl font-black uppercase">{plan.plan}</h3>
+          <p class="text-4xl font-extrabold">{plan.price}</p>
+          <ul class="space-y-2 flex-1 text-sm">
+            {plan.features.map((f) => (
+              <li class="flex items-center gap-2">
+                <span class:list={[i === 1 ? 'text-black' : 'text-green-400']}>✓</span>
+                {f}
+              </li>
+            ))}
+          </ul>
+          <button class:list={['mt-4 py-3 px-4 rounded-lg font-bold uppercase transition', i === 1 ? 'bg-black text-green-400 hover:bg-gray-900' : 'bg-green-500 text-black hover:bg-green-400']}>
+            Join Now
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<Footer name={config.name} email={config.contactEmail} tenantId={config.id} dark />
